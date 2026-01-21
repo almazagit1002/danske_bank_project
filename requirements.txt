@@ -1,0 +1,11 @@
+pyspark
+pyyaml
+py4j
+python-dotenv
+boto3
+pandas
+pyarrow
+ipykernel
+matplotlib
+seaborn
+scikit-learn
