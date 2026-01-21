@@ -3,7 +3,12 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
-variable "bucket_name" {
+variable "raw_bucket_name" {
   type    = string
   default = "danske-bank-project"
+}
+
+variable "metadata_bucket_name" {
+  type    = string
+  default = "danske-bank-project-metadata"
 }

@@ -1,0 +1,9 @@
+BRONZE_BASE_PATH: s3a://danske-bank-project/bronze
+METADATA_BASE_PATH: s3a://danske-bank-project-metadata/profiling
+region: us-east-1
+sources:
+  - payments
+  - merchant
+  - device
+  - customer_behavior
+  - fraud_timing

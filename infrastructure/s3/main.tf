@@ -12,33 +12,27 @@ provider "aws" {
   region = var.aws_region
 }
 
-# --- S3 Bucket ---
+# --- Raw Data S3 Bucket ---
 resource "aws_s3_bucket" "raw_data_bucket" {
-  bucket = var.bucket_name
+  bucket = var.raw_bucket_name
 
   tags = {
     Name        = "Danske Bank Project Raw Data"
     Environment = "dev"
   }
-
-  # ACL removed because AWS now blocks ACLs on new buckets
 }
 
-# --- Folders inside S3 bucket ---
-locals {
-  folders = [
-    "payments_core/",
-    "fraud_system/",
-    "merchant_system/",
-    "device_telemetry/",
-    "customer_behavior/",
-    "fraud_timing/",
-    "data_source/"
-  ]
+
+
+# --- Metadata S3 Bucket ---
+resource "aws_s3_bucket" "metadata_bucket" {
+  bucket = var.metadata_bucket_name
+
+  tags = {
+    Name        = "Danske Bank Project Metadata"
+    Environment = "dev"
+  }
 }
 
-resource "aws_s3_object" "folders" {
-  for_each = toset(local.folders)
-  bucket   = aws_s3_bucket.raw_data_bucket.bucket
-  key      = each.key
-}
+
+
