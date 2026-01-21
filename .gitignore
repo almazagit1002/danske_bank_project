@@ -214,3 +214,9 @@ __marimo__/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
