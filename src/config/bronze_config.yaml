@@ -1,0 +1,21 @@
+sources:
+  payments:
+    format: csv
+    path: s3a://danske-bank-project/payments_core/payments_core.csv
+    
+  merchant:
+    format: parquet
+    path: s3a://danske-bank-project/merchant_system/merchant_transactions.parquet
+
+  device:
+    format: jsonl
+    path: s3a://danske-bank-project/device_telemetry/device_events.jsonl
+
+  customer_behavior:
+    format: csv
+    path: s3a://danske-bank-project/customer_behavior/customer_behavior.csv
+
+  fraud_timing:
+    format: parquet
+    path: s3a://danske-bank-project/fraud_timing/fraud_timing.parquet
+ 
