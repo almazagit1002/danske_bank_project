@@ -92,32 +92,33 @@ Purpose: enable reporting, dashboards, and fraud monitoring use cases.
     
 ### 2. Install Project Dependencies:
    Install all required Python libraries:
-    ```
+```
    pip install -r requirements.txt
-   ```
+```
    or 
-    ```
+```
    pip install -e .
 
-   ```
-   This allows imports from src/ to work correctly.
+```
+This allows imports from src/ to work correctly.
 
 
 ### 3. Provision Infrastructure (AWS S3):
-   The project uses Terraform to provision the S3 data lake.
-   Navigate to the Terraform directory:
-    ```
+The project uses Terraform to provision the S3 data lake.
+Navigate to the Terraform directory:
+```
    cd infrastructure/s3
 
-   ```
-   Initialize and apply the Terraform configuration:
-    ```
+```
+Initialize and apply the Terraform configuration:
+
+```
    terraform init
    terraform plan
    terraform apply
 
 
-   ```
+```
 
 This creates the required S3 bucket structure for the Bronze, Silver, and Gold layers.
 
@@ -127,29 +128,28 @@ Note: AWS credentials must be configured locally  before running Terraform.
 To simulate multiple upstream data sources, the original dataset is decomposed into smaller files and uploaded to S3.
 
 Run the data decomposition logic:
-    ```
+```
     cd data_decomposition
     python data_decompose.py
     python s3_raw_uploader.py
-    ```
+```
 This step:
-    * Splits the original dataset
 
-    * Generates multiple source files with different schemas
+* Splits the original dataset
 
-    * Uploads raw data to the S3 Bronze layer
+* Generates multiple source files with different schemas
+
+* Uploads raw data to the S3 Bronze layer
 
 ### 5 Run the Data Pipelines (Bronze → Silver → Gold)
 Return to the project root and run the main pipeline entry point:
 
 
-    ```
+```
    cd ..
    python src/main.py
 
-
-
-   ```
+```
 
 ### Outputs
 After successful execution, the following outputs are produced:
