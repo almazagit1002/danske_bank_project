@@ -1,0 +1,20 @@
+paths:
+  bronze: "s3a://danske-bank-project/bronze"
+  silver: "s3a://danske-bank-project/silver"
+
+standardize_cols:
+  transactionId: "transaction_id"
+  tx_id: "transaction_id"
+  ID: "transaction_id"
+  Amount: "amount"
+  Location: "location"
+
+
+null_location_threshold: 0.05  # 5% nulls allowed before adding flag arbitray? could have been agreed with team
+
+sources:
+  - payments
+  - merchant
+  - device
+  - customer_behavior
+  - fraud_timing

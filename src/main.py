@@ -1,23 +1,46 @@
-# main.py
 from fraud_pipelines.pipelines.bronze_pipeline import BronzePipeline
+from fraud_pipelines.pipelines.silver_pipeline import SilverPipeline
 import logging
+import sys
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)]
 )
+logger = logging.getLogger("FullPipeline")
 
 def main():
-    logging.info("Starting full data pipeline...")
+    logger.info("Starting full data pipeline...")
 
-    # Bronze ingestion
-    bronze_pipeline = BronzePipeline(
-        config_path="config/bronze_config.yaml",
-        bronze_base_path="s3a://danske-bank-project/bronze"
-    )
-    bronze_pipeline.run()
+    # # Bronze ingestion
+    # try:
+    #     logger.info("Starting Bronze ingestion pipeline...")
+    #     bronze_pipeline = BronzePipeline(
+    #         config_path="config/bronze_config.yaml",
+    #         bronze_base_path="s3a://danske-bank-project/bronze"
+    #     )
+    #     bronze_pipeline.run()
+    #     logger.info("Bronze ingestion pipeline finished successfully.")
+    # except Exception as e:
+    #     logger.exception("Bronze ingestion pipeline failed: %s", e)
 
-    logging.info("Pipeline finished successfully.")
+    # Silver ingestion
+
+    try:
+        logger.info("Starting Silver ingestion pipeline...")
+        silver_pipeline = SilverPipeline(
+            config_path="config/silver_config.yaml"
+        )
+        silver_pipeline.run()
+        logger.info("Silver ingestion pipeline finished successfully.")
+    except Exception as e:
+        logger.exception("Silver ingestion pipeline failed: %s", e)
+
+    logger.info("Full pipeline finished.")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        logger.exception("Pipeline execution failed: %s", e)
