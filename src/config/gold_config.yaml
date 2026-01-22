@@ -1,0 +1,17 @@
+paths:
+  silver: "s3a://danske-bank-project/silver"
+  gold: "s3a://danske-bank-project/gold"
+
+sources:
+  - payments
+  - merchant
+  - device
+  - customer_behavior
+  - fraud_timing
+
+  
+transaction_sources:
+  - payments
+  - merchant
+  - device
+  - fraud_timing

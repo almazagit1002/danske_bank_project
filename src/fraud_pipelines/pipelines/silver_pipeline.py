@@ -21,7 +21,7 @@ class SilverPipeline:
 
         self.alerts = []
         self.dfs: Dict[str, object] = {}
-        self.row_counts = {}
+        self.row_counts: Dict[str, int] = {}
 
         self._configure_logging()
         self._load_configs()

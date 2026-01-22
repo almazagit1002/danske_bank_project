@@ -1,7 +1,10 @@
-from fraud_pipelines.pipelines.bronze_pipeline import BronzePipeline
-from fraud_pipelines.pipelines.silver_pipeline import SilverPipeline
 import logging
 import sys
+
+from fraud_pipelines.pipelines.bronze_pipeline import BronzePipeline
+from fraud_pipelines.pipelines.silver_pipeline import SilverPipeline
+from fraud_pipelines.pipelines.gold_pipeline import GoldPipeline
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -27,15 +30,26 @@ def main():
 
     # Silver ingestion
 
+    # try:
+    #     logger.info("Starting Silver ingestion pipeline...")
+    #     silver_pipeline = SilverPipeline(
+    #         config_path="config/silver_config.yaml"
+    #     )
+    #     silver_pipeline.run()
+    #     logger.info("Silver ingestion pipeline finished successfully.")
+    # except Exception as e:
+    #     logger.exception("Silver ingestion pipeline failed: %s", e)
+
+
     try:
-        logger.info("Starting Silver ingestion pipeline...")
-        silver_pipeline = SilverPipeline(
-            config_path="config/silver_config.yaml"
+        logger.info("Starting Gold ingestion pipeline...")
+        gold_pipeline = GoldPipeline(
+            config_path="config/gold_config.yaml"
         )
-        silver_pipeline.run()
-        logger.info("Silver ingestion pipeline finished successfully.")
+        gold_pipeline.run()
+        logger.info("Gold ingestion pipeline finished successfully.")
     except Exception as e:
-        logger.exception("Silver ingestion pipeline failed: %s", e)
+        logger.exception("Gold ingestion pipeline failed: %s", e)
 
     logger.info("Full pipeline finished.")
 
