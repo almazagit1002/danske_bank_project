@@ -1,0 +1,6 @@
+S3_BUCKET: danske-bank-project
+
+datasets:
+  - fraud_by_category
+  - fraud_by_type
+  - fraud_by_location
