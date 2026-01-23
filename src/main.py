@@ -5,6 +5,7 @@ from fraud_pipelines.pipelines.bronze_pipeline import BronzePipeline
 from fraud_pipelines.pipelines.silver_pipeline import SilverPipeline
 from fraud_pipelines.pipelines.gold_pipeline import GoldPipeline
 from fraud_pipelines.data_analysis.fraud_stats import FraudStatsAnalyzer
+from utils.timed_stage import timed_stage
 
 
 logging.basicConfig(
@@ -19,52 +20,47 @@ def main():
 
     # Bronze ingestion
     try:
-        logger.info("Starting Bronze ingestion pipeline...")
-        bronze_pipeline = BronzePipeline(
-            config_path="config/bronze_config.yaml",
-            bronze_base_path="s3a://danske-bank-project/bronze"
-        )
-        bronze_pipeline.run()
-        logger.info("Bronze ingestion pipeline finished successfully.")
-    except Exception as e:
-        logger.exception("Bronze ingestion pipeline failed: %s", e)
+        with timed_stage("Bronze ingestion pipeline", logger):
+            bronze_pipeline = BronzePipeline(
+                config_path="config/bronze_config.yaml",
+                bronze_base_path="s3a://danske-bank-project/bronze"
+            )
+            bronze_pipeline.run()
+    except Exception:
+        logger.exception("Bronze ingestion pipeline failed.")
 
-    #Silver ingestion
-
+    # Silver ingestion
     try:
-        logger.info("Starting Silver ingestion pipeline...")
-        silver_pipeline = SilverPipeline(
-            config_path="config/silver_config.yaml"
-        )
-        silver_pipeline.run()
-        logger.info("Silver ingestion pipeline finished successfully.")
-    except Exception as e:
-        logger.exception("Silver ingestion pipeline failed: %s", e)
+        with timed_stage("Silver ingestion pipeline", logger):
+            silver_pipeline = SilverPipeline(
+                config_path="config/silver_config.yaml"
+            )
+            silver_pipeline.run()
+    except Exception:
+        logger.exception("Silver ingestion pipeline failed.")
 
-    #Gold ingestion
+    # Gold ingestion
     try:
-        logger.info("Starting Gold ingestion pipeline...")
-        gold_pipeline = GoldPipeline(
-            config_path="config/gold_config.yaml"
-        )
-        gold_pipeline.run()
-        logger.info("Gold ingestion pipeline finished successfully.")
-    except Exception as e:
-        logger.exception("Gold ingestion pipeline failed: %s", e)
+        with timed_stage("Gold ingestion pipeline", logger):
+            gold_pipeline = GoldPipeline(
+                config_path="config/gold_config.yaml"
+            )
+            gold_pipeline.run()
+    except Exception:
+        logger.exception("Gold ingestion pipeline failed.")
+
+    # Stats / analysis
+    try:
+        with timed_stage("Fraud statistics analysis", logger):
+            analyzer = FraudStatsAnalyzer("config/stats_config.yaml")
+            analyzer.load_datasets()
+            analyzer.plot_category_stats()
+            analyzer.plot_location_stats()
+    except Exception:
+        logger.exception("Stats analysis failed.")
 
     logger.info("Full pipeline finished.")
 
-    try:
-        logger.info("Starting stats analyisis...")
-        analyzer = FraudStatsAnalyzer("config/stats_config.yaml")
-        analyzer.load_datasets()
-        analyzer.plot_category_stats()
-        analyzer.plot_location_stats()
-        logger.info("Stats analyisis finished successfully.")
-    except Exception as e:
-        logger.exception("Stats analyisis failed: %s", e)
-
-    logger.info("Full pipeline finished.")
 if __name__ == "__main__":
     try:
         main()
